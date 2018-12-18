@@ -1,5 +1,8 @@
+# CONTAINER INSPIRED BY unitedclassifiedsapps:gitlab-ci-android-fastlane
+# ADDS NODE & NPM 
+
 FROM phusion/baseimage:0.10.0
-LABEL maintainer="United Classifieds <unitedclassifiedsapps@gmail.com>"
+LABEL maintainer="gamoridev <gamoridev@protonmail.com>"
 
 CMD ["/sbin/my_init"]
 
@@ -12,6 +15,8 @@ ENV VERSION_BUILD_TOOLS "27.0.3"
 ENV VERSION_TARGET_SDK "27"
 
 ENV ANDROID_HOME "/sdk"
+
+ENV NODE_VERSION 10  
 
 ENV PATH "$PATH:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools"
 ENV DEBIAN_FRONTEND noninteractive
@@ -40,6 +45,9 @@ RUN yes | ${ANDROID_HOME}/tools/bin/sdkmanager --licenses
 RUN mkdir -p $HOME/.android && touch $HOME/.android/repositories.cfg
 RUN ${ANDROID_HOME}/tools/bin/sdkmanager "platform-tools" "tools" "platforms;android-${VERSION_TARGET_SDK}" "build-tools;${VERSION_BUILD_TOOLS}"
 RUN ${ANDROID_HOME}/tools/bin/sdkmanager "extras;android;m2repository" "extras;google;google_play_services" "extras;google;m2repository"
+
+RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash -
+RUN apt-get install -y nodejs
 
 RUN gem install fastlane
 
